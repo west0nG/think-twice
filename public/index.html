@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Think Twice is a classroom prototype for everyday payments and trusted-contact scam review.">
+  <meta name="theme-color" content="#f6f7f3">
+  <title>Think Twice · Payment safety</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#karen" aria-label="Think Twice home">
+        <span class="brand-mark" data-icon="shield"></span>
+        <span>Think Twice</span>
+      </a>
+      <nav class="role-switch" aria-label="Demo role">
+        <a href="#karen" id="role-karen" aria-current="page"><span data-icon="person"></span>Karen<span class="role-name"> · Older adult</span></a>
+        <a href="#emily" id="role-emily"><span data-icon="users"></span>Emily<span class="role-name"> · Trusted contact</span><span class="nav-dot" hidden></span></a>
+      </nav>
+      <button class="reset-button" type="button" data-action="reset"><span data-icon="reset"></span><span>Reset demo</span></button>
+    </div>
+  </header>
+  <main id="main" class="main" tabindex="-1"></main>
+  <footer class="footer">
+    <span class="footer-brand"><span data-icon="shield"></span> Think Twice</span>
+    <span>Classroom prototype · Simulated payments and alerts</span>
+  </footer>
+  <dialog id="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description"></dialog>
+  <aside class="toast" id="contact-toast" aria-label="New payment notification" hidden>
+    <span class="icon-tile amber" data-icon="bell"></span>
+    <div><strong>New payment alert</strong><p>Karen’s $47.50 payment is waiting for your review.</p></div>
+    <button class="toast-close" type="button" aria-label="Dismiss notification" data-action="dismiss-toast"><span data-icon="close"></span></button>
+  </aside>
+  <div id="announcer" class="sr-only" role="status"></div>
+  <noscript><p class="noscript">Enable JavaScript to run this interactive prototype.</p></noscript>
+</body>
+</html>
