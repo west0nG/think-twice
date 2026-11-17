@@ -18,13 +18,15 @@
     <button class="reset" type="button" data-action="reset" aria-label="Reset demo" title="Reset demo"><span data-icon="reset"></span></button>
   </header>
 
-  <div class="device">
-    <div class="status-bar" aria-hidden="true">
-      <span>4:56</span>
-      <div class="status-icons"><span data-icon="signal"></span><span data-icon="wifi"></span><span data-icon="battery"></span></div>
+  <div class="phone-frame">
+    <div class="device">
+      <div class="status-bar" aria-hidden="true">
+        <span>4:56</span>
+        <div class="status-icons"><span data-icon="signal"></span><span data-icon="wifi"></span><span data-icon="battery"></span></div>
+      </div>
+      <main id="screen"></main>
+      <div class="device-bottom"><a href="#karen" id="home-indicator" aria-label="Phone home"><span></span></a></div>
     </div>
-    <main id="screen"></main>
-    <div class="device-bottom"><a href="#karen" id="home-indicator" aria-label="Phone home"><span></span></a></div>
   </div>
 
   <dialog id="payment-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-message"></dialog>

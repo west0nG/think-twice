@@ -26,7 +26,14 @@ const dialog = document.querySelector('#payment-dialog');
 const announcement = document.querySelector('#announcement');
 const storageKey = 'think-twice-demo-v2';
 const initialState = { messageRead: false, billPaid: false, tollStatus: 'idle' };
-const electricity = { provider: 'Maple City Light', amount: '$64.80' };
+const electricity = {
+  provider: 'Maple City Light',
+  amount: '$64.80',
+  dueDate: 'Nov 24',
+  account: '•• 0318',
+  period: 'Oct 16 – Nov 15',
+  confirmation: 'CL-48219'
+};
 const toll = {
   provider: 'Bayline Tolls',
   bridge: 'Bayline Bridge',
@@ -112,11 +119,14 @@ function homeScreen() {
   return `<section class="launcher">
     <h1 class="sr-only" tabindex="-1">Karen’s phone</h1>
     <div class="launcher-grid">
+      <a class="app-link" href="#karen/utilities">
+        <span class="app-tile utilities">${icon('bolt')}</span>
+        ${state.billPaid ? 'Bill receipt' : 'Pay bill'}
+      </a>
       <a class="app-link" href="#karen/messages" ${state.messageRead ? '' : 'aria-label="Messages, 1 unread"'}>
         <span class="app-tile messages">${icon('messages')}${state.messageRead ? '' : '<span class="unread" aria-hidden="true">1</span>'}</span>
         Messages
       </a>
-      <a class="app-link" href="#karen/utilities"><span class="app-tile utilities">${icon('bolt')}</span>Utilities</a>
     </div>
     ${outcome ? `<a class="launcher-status" href="#karen/browser">
       ${mark(outcome.icon, state.tollStatus)}<span>${outcome.title} · ${toll.amount}</span><span class="chevron">${icon('chevron')}</span>
@@ -160,7 +170,11 @@ function receipt(outcome, provider, amount, status = '') {
     ${mark(outcome.icon, status)}
     <h1 tabindex="-1">${outcome.title}</h1>
     ${outcome.text ? `<p>${outcome.text}</p>` : ''}
-    ${rows([['To', provider], ['Amount', amount, 'amount']])}
+    ${rows([
+      ['To', provider],
+      ['Amount', amount, 'amount'],
+      ...(outcome.confirmation ? [['Confirmation', outcome.confirmation]] : [])
+    ])}
   </section>`;
 }
 
@@ -191,13 +205,17 @@ function utilitiesScreen() {
   return `${heading(electricity.provider, '#karen', 'Phone home')}
     <section class="billing">
       ${state.billPaid
-        ? receipt({ title: 'Payment complete', icon: 'check' }, electricity.provider, electricity.amount)
+        ? receipt({
+            title: 'Payment complete',
+            icon: 'check',
+            confirmation: electricity.confirmation
+          }, electricity.provider, electricity.amount)
         : `<h1 tabindex="-1">Electricity bill</h1>
-          <div class="card">${rows([
-            ['Billing period', 'Oct 16 – Nov 15'],
-            ['Due date', 'Nov 24'],
-            ['Amount due', electricity.amount, 'amount']
-          ])}</div>
+          <div class="card current-bill">
+            <p class="bill-total"><span class="sr-only">Amount due </span>${electricity.amount}</p>
+            <p class="bill-due">Due ${electricity.dueDate}</p>
+            ${rows([['Account', electricity.account], ['Billing period', electricity.period]])}
+          </div>
           ${paymentMethod()}
           ${button(`Pay ${electricity.amount}`, 'pay-bill')}`}
     </section>`;
