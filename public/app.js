@@ -3,7 +3,8 @@ const icons = {
   person: '<circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 21v-1.5a6 6 0 0 1 6-6h3a6 6 0 0 1 6 6V21"/>',
   reset: '<path d="M3 12a9 9 0 1 1 2.7 6.4M3 12V6m0 6h6"/>',
   messages: '<path d="M20.5 13a3 3 0 0 1-3 3H11l-5.5 3V16a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3Z"/><path d="M7 9h9m-9 3.5h6"/>',
-  bolt: '<path d="m13 2-8 12h6l-1 8 9-12h-6l1-8Z"/>',
+  wallet: '<path d="M20.5 8V6a2 2 0 0 0-2-2h-13A2.5 2.5 0 0 0 3 6.5m0 0A2.5 2.5 0 0 0 5.5 9h15A1.5 1.5 0 0 1 22 10.5v8a1.5 1.5 0 0 1-1.5 1.5h-15A2.5 2.5 0 0 1 3 17.5v-11ZM22 12h-5.5a2.5 2.5 0 0 0 0 5H22m-4.5-2.5h.01"/>',
+  contactless: '<path d="M5 10a4 4 0 0 1 0 4m3.6-6.1a7.5 7.5 0 0 1 0 8.2m3.7-10.4a11 11 0 0 1 0 12.6m3.7-14.8a14.5 14.5 0 0 1 0 17"/>',
   bell: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12a2.1 2.1 0 0 0 4 0"/>',
   chevron: '<path d="m9 6 6 6-6 6"/>',
   back: '<path d="M20 12H5m6 6-6-6 6-6"/>',
@@ -25,15 +26,9 @@ const device = document.querySelector('.device');
 const dialog = document.querySelector('#payment-dialog');
 const announcement = document.querySelector('#announcement');
 const storageKey = 'think-twice-demo-v2';
-const initialState = { messageRead: false, billPaid: false, tollStatus: 'idle' };
-const electricity = {
-  provider: 'Maple City Light',
-  amount: '$64.80',
-  dueDate: 'Nov 24',
-  account: '•• 0318',
-  period: 'Oct 16 – Nov 15',
-  confirmation: 'CL-48219'
-};
+const initialState = { messageRead: false, walletPaid: false, tollStatus: 'idle' };
+const checkout = { merchant: 'Oak Market', amount: '$18.42', confirmation: 'OM-2048' };
+const cardNumber = '•••• 4821';
 const toll = {
   provider: 'Bayline Tolls',
   bridge: 'Bayline Bridge',
@@ -62,7 +57,7 @@ function readState() {
     if (saved && (saved.tollStatus === 'idle' || Object.hasOwn(outcomes, saved.tollStatus))) {
       return {
         messageRead: saved.messageRead === true,
-        billPaid: saved.billPaid === true,
+        walletPaid: saved.walletPaid === true,
         tollStatus: saved.tollStatus
       };
     }
@@ -111,7 +106,7 @@ function rows(items) {
 }
 
 function paymentMethod() {
-  return `<div class="method">${icon('card')} Visa •••• 4821</div>`;
+  return `<div class="method">${icon('card')} Visa ${cardNumber}</div>`;
 }
 
 function homeScreen() {
@@ -119,9 +114,9 @@ function homeScreen() {
   return `<section class="launcher">
     <h1 class="sr-only" tabindex="-1">Karen’s phone</h1>
     <div class="launcher-grid">
-      <a class="app-link" href="#karen/utilities">
-        <span class="app-tile utilities">${icon('bolt')}</span>
-        ${state.billPaid ? 'Bill receipt' : 'Pay bill'}
+      <a class="app-link" href="#karen/wallet">
+        <span class="app-tile wallet">${icon('wallet')}</span>
+        Wallet
       </a>
       <a class="app-link" href="#karen/messages" ${state.messageRead ? '' : 'aria-label="Messages, 1 unread"'}>
         <span class="app-tile messages">${icon('messages')}${state.messageRead ? '' : '<span class="unread" aria-hidden="true">1</span>'}</span>
@@ -201,23 +196,24 @@ function browserScreen() {
   </article>`;
 }
 
-function utilitiesScreen() {
-  return `${heading(electricity.provider, '#karen', 'Phone home')}
-    <section class="billing">
-      ${state.billPaid
+function walletScreen() {
+  return `${heading('Wallet', '#karen', 'Phone home')}
+    <section class="wallet-screen">
+      ${state.walletPaid
         ? receipt({
             title: 'Payment complete',
             icon: 'check',
-            confirmation: electricity.confirmation
-          }, electricity.provider, electricity.amount)
-        : `<h1 tabindex="-1">Electricity bill</h1>
-          <div class="card current-bill">
-            <p class="bill-total"><span class="sr-only">Amount due </span>${electricity.amount}</p>
-            <p class="bill-due">Due ${electricity.dueDate}</p>
-            ${rows([['Account', electricity.account], ['Billing period', electricity.period]])}
+            confirmation: checkout.confirmation
+          }, checkout.merchant, checkout.amount)
+        : `<div class="wallet-card" aria-label="Saved debit card">
+            <div class="wallet-card-top"><span>Debit card</span>${icon('contactless')}</div>
+            <div class="wallet-card-bottom"><span>${cardNumber}</span><strong>VISA</strong></div>
           </div>
-          ${paymentMethod()}
-          ${button(`Pay ${electricity.amount}`, 'pay-bill')}`}
+          <div class="wallet-charge">
+            <p>${checkout.merchant}</p>
+            <strong>${checkout.amount}</strong>
+          </div>
+          ${button(icon('contactless') + 'Tap to pay', 'pay-wallet', 'tap-pay')}`}
     </section>`;
 }
 
@@ -267,7 +263,7 @@ function reviewScreen() {
 }
 
 const views = {
-  karen: { home: homeScreen, messages: inboxScreen, thread: threadScreen, browser: browserScreen, utilities: utilitiesScreen },
+  karen: { home: homeScreen, messages: inboxScreen, thread: threadScreen, browser: browserScreen, wallet: walletScreen },
   emily: { home: alertsScreen, review: reviewScreen }
 };
 
@@ -293,7 +289,7 @@ function render({ focus = false, resetScroll = false } = {}) {
   if (!resetScroll && textWasOpen) screen.querySelector('.original')?.setAttribute('open', '');
   if (resetScroll) screen.scrollTop = 0;
   if (focus) {
-    const target = screen.querySelector(route.view === 'utilities' ? '.billing h1' : 'h1');
+    const target = screen.querySelector('.result h1') ?? screen.querySelector('h1');
     target?.focus({ preventScroll: true });
   }
 }
@@ -333,8 +329,8 @@ const actions = {
     applyRoute(true);
     announcement.textContent = 'Demo reset.';
   },
-  'pay-bill'() {
-    save({ billPaid: true });
+  'pay-wallet'() {
+    save({ walletPaid: true });
     render({ focus: true });
   },
   'pay-toll'() {

@@ -131,7 +131,7 @@ a { color: inherit; }
 .app-tile { position: relative; display: grid; place-items: center; width: 63px; height: 63px; border-radius: 18px; box-shadow: inset 0 1px 0 #ffffff52, 0 5px 13px #10292054; }
 .app-tile .icon { width: 31px; height: 31px; }
 .app-tile.messages { background: linear-gradient(145deg, #daf2eb, #7bc8b1); color: #184d43; }
-.app-tile.utilities { background: linear-gradient(145deg, #fff2b9, #e0a657); color: #5e390b; }
+.app-tile.wallet { background: linear-gradient(145deg, #e5ddf5, #a7a2d9); color: #39306b; }
 .unread { position: absolute; right: -4px; top: -4px; display: grid; place-items: center; min-width: 21px; height: 21px; padding: 0 4px; border: 2px solid #1c454b; border-radius: 100px; background: #a8323a; color: white; font-size: .72rem; font-weight: 780; }
 .launcher-status { display: flex; align-items: center; gap: 12px; margin-top: 24px; padding: 12px; border: 1px solid #cfe5dc64; border-radius: 14px; background: #172f3bd6; text-decoration: none; font-size: .95rem; font-weight: 690; }
 .launcher-status .chevron { margin-left: auto; }
@@ -170,7 +170,7 @@ a { color: inherit; }
 .toll-brand { display: flex; align-items: center; gap: 9px; min-height: 51px; padding: 9px 18px; background: #153d62; color: #fff; font-size: 1.02rem; font-weight: 760; }
 .toll-brand .icon { width: 27px; height: 27px; }
 .checkout { padding: 18px 16px 21px; }
-.checkout h1, .billing h1 { margin: 0 0 15px; font-size: 1.55rem; line-height: 1.12; font-weight: 780; letter-spacing: -.045em; }
+.checkout h1 { margin: 0 0 15px; font-size: 1.55rem; line-height: 1.12; font-weight: 780; letter-spacing: -.045em; }
 .card { padding: 15px; border: 1px solid #dce5ea; border-radius: 13px; background: #fff; }
 .details { margin: 0; }
 .details > div { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 15px; padding: 9px 0; border-bottom: 1px solid var(--line); }
@@ -187,13 +187,46 @@ a { color: inherit; }
 .action.blue { background: var(--navy); }
 .action.outline { border-color: #aabeb7; background: #fff; color: #285649; }
 .action.danger { background: var(--red); }
-.checkout .action, .billing .action { margin-top: 12px; }
-.billing { flex: 1; padding: 22px 16px; background: #f5f8f5; }
-.billing .method { background: #edf3ee; }
-.current-bill { border-color: #d7e6df; background: linear-gradient(145deg, #fff, #eff7f1); }
-.bill-total { margin: 1px 0 0; color: #214c3d; font-size: clamp(2rem, 5vw, 2.45rem); line-height: 1.12; font-weight: 780; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
-.bill-due { margin: 4px 0 14px; color: #435d53; font-size: .94rem; }
-.current-bill .details { padding-top: 12px; border-top: 1px solid var(--line); }
+.checkout .action { margin-top: 12px; }
+
+.wallet-screen { flex: 1; padding: 18px 16px; background: #f3f2f8; color: #20203b; }
+.wallet-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aspect-ratio: 1.59;
+  padding: 15px;
+  border: 1px solid #514a7a;
+  border-radius: 15px;
+  background: linear-gradient(142deg, #302953, #262343 60%, #49467d);
+  color: #fbf9ff;
+  box-shadow: 0 6px 15px #2b244e21;
+}
+.wallet-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -34%;
+  top: -76%;
+  width: 94%;
+  aspect-ratio: 1;
+  border: 1px solid #d9ceff3b;
+  border-radius: 50%;
+  box-shadow: 0 0 0 20px #c4b8f219, 0 0 0 43px #c4b8f216, 0 0 0 67px #c4b8f213;
+}
+.wallet-card-top, .wallet-card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wallet-card-top { font-size: .9rem; font-weight: 660; }
+.wallet-card-bottom { font-size: .93rem; letter-spacing: .045em; }
+.wallet-card-bottom strong { font-size: 1.14rem; font-style: italic; }
+.wallet-charge { padding: 20px 0 16px; text-align: center; }
+.wallet-charge p { margin: 0 0 5px; font-size: 1rem; font-weight: 690; }
+.wallet-charge strong { font-size: 2.1rem; line-height: 1; letter-spacing: -.045em; }
+.action.tap-pay { background: #373066; }
+.wallet-screen .result { color: var(--ink); }
+.wallet-screen .result h1 { letter-spacing: -.035em; }
 
 .result { padding: 20px 18px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
 .result h1 { margin: 11px 0 7px; font-size: 1.39rem; }
